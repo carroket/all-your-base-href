@@ -75,8 +75,6 @@
 
 	function setBaseHref(href) {
 
-		console.info("Setting base href to " + href + ".");
-
 		// Select the base element.
 
 		var element = document.querySelector("head > base");
