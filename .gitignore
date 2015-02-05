@@ -1,0 +1,11 @@
+# OS X
+.DS_Store
+# Adobe Dreamweaver
+_notes/
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+# JetBrains IDEs
+.idea/
+# CodeKit
+config.codekit
