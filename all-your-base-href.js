@@ -16,20 +16,31 @@
 
 \*============================================================================*/
 
-(function(document, location, angular, deploymentContexts) {
+(function(document, location, angular, options) {
 
-	/* If no deployment contexts were specified, provide a sensible default for
-		local subdirectory-based multi-site deployment.
+	var allYourBaseHref = new AllYourBaseHref();
 
-		For example: http://foo.local/~username/example.com
-	*/
+	function AllYourBaseHref() {
 
-	if (!deploymentContexts) {
+		/* If no deployment contexts were specified, provide a sensible default
+			for local subdirectory-based multi-site deployment.
 
-		deploymentContexts = [
+			For example: http://foo.local/~username/example.com
+		*/
 
-			"^https?://[A-Za-z0-9-.].*local(/~[^/]+/[^/]+/).*$"
-		];
+		if (!options || !options.deploymentContexts) {
+
+			this.deploymentContexts = [
+
+				"^https?://[A-Za-z0-9-.].*local(/~[^/]+/[^/]+/).*$"
+			];
+		}
+
+		else {
+
+			this.deploymentContexts = options.deploymentContexts;
+		}
+
 	}
 
 	// If AngularJS is present, register a module and do the things from that.
@@ -38,31 +49,31 @@
 
 		angular.module("allYourBaseHref", [])
 
-			.run(doTheThings);
+			.run(allYourBaseHref.doTheThings);
 	}
 
 	// Otherwise, just do the things.
 
 	else {
 
-		doTheThings();
+		allYourBaseHref.doTheThings();
 	}
 
-	// Look, ma! Functions!
+	// Look, ma! Methods!
 
-	function doTheThings() {
+	AllYourBaseHref.prototype.doTheThings = function() {
 
-		setBaseHref(getContextHref());
-	}
+		allYourBaseHref.setBaseHref(allYourBaseHref.getContextHref());
+	};
 
-	function getContextHref() {
+	AllYourBaseHref.prototype.getContextHref = function() {
 
 		var regEx;
 		var result;
 
-		for (var i = 0; i < deploymentContexts.length; i++) {
+		for (var i = 0; i < this.deploymentContexts.length; i++) {
 
-			regEx = new RegExp(deploymentContexts[i]);
+			regEx = new RegExp(this.deploymentContexts[i]);
 
 			result = regEx.exec(location.href);
 
@@ -71,9 +82,9 @@
 				return result[1];
 			}
 		}
-	}
+	};
 
-	function setBaseHref(href) {
+	AllYourBaseHref.prototype.setBaseHref = function(href) {
 
 		// Select the base element.
 
@@ -101,6 +112,11 @@
 		// Drum roll, please!
 
 		element.href = href;
+	};
+
+	if (options && options.namespace instanceof Object) {
+
+		options.namespace.allYourBaseHref = allYourBaseHref;
 	}
 
 })(window.document, window.location, window.angular);
