@@ -72,7 +72,7 @@ If you wish to *override* the default deployment context, simply specify an arra
 })(window.document, window.location, window.angular, { deploymentContexts: ["^http://foo.local:1337(/app/)$"] });
 ```
 
-The config **deploymentContexts** property should be an array even if you are only specifying one pattern, so don't forget those square brackets.
+The options object's **deploymentContexts** property should be an array even if you are only specifying one pattern, so don't forget those square brackets.
 
 Note the parentheses in each of the above deployment-context patterns. Those indicate subpatterns and they determine which part of each pattern match is used as its corresponding base href value.
 
