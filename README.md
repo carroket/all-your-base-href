@@ -41,13 +41,11 @@ That's it! There is no user interface, so you don't need to add any other markup
 
 ### Configuration
 
-All Your Base Href supports local subdirectory-based multi-site deployment to contexts such as http://foo.local/~username/example.com/ by default. If you are doing local development using a **.local** domain, a user directory, and a project directory, the default deployment context may suit your needs.
+All Your Base Href supports initialization-time configuration via an options object containing either or both of the following properties:
+* **deploymentContexts** (Array)
+* **namespace** (Object)
 
-```javascript
-"^https?://[A-Za-z0-9-.].*local(/~[^/]+/[^/]+/).*$"
-```
-
-If you wish to *override* the default deployment context, simply pass an array of deployment-context patterns into the function expression from the last line of **all-your-base-href.js**.
+To use an options object, simply pass it into the function expression as a fourth parameter in the call at the end of **all-your-base-href.js** or **all-your-base-href.min.js**.
 
 Find this:
 
@@ -57,10 +55,24 @@ Find this:
 
 Then change that to something like this:
 ```javascript
-})(window.document, window.location, window.angular, ["^http://foo.local:1337(/app/)$"]);
+})(window.document, window.location, window.angular, { /* Option properties go here. */ });
 ```
 
-The deployment-context parameter should be an array even if you are only specifying one pattern, so don't forget those brackets.
+#### Deployment Contexts
+
+All Your Base Href supports local subdirectory-based multi-site deployment to contexts such as http://foo.local/~username/example.com/ by default. If you are doing local development using a **.local** domain, a user directory, and a project directory, the default deployment context may suit your needs.
+
+```javascript
+"^https?://[A-Za-z0-9-.].*local(/~[^/]+/[^/]+/).*$"
+```
+
+If you wish to *override* the default deployment context, simply specify an array of deployment-context patterns via the **deploymentContexts** property of the options object.
+
+```javascript
+})(window.document, window.location, window.angular, { deploymentContexts: ["^http://foo.local:1337(/app/)$"] });
+```
+
+The config **deploymentContexts** property should be an array even if you are only specifying one pattern, so don't forget those square brackets.
 
 Note the parentheses in each of the above deployment-context patterns. Those indicate subpatterns and they determine which part of each pattern match is used as its corresponding base href value.
 
@@ -75,6 +87,26 @@ The window.location.href value for a page running at or below http://foo.local/~
 ```html
 <base href="/~username/example.com/">
 ```
+
+#### Namespace
+
+By default, All Your Base Href is encapsulated, but if you wish, it can expose a reference to itself to an object you specify via the **namespace** property of the options object.
+
+For example, if you want a global reference to enable easy testing or tinkering from a JavaScript console, you might do something like this:
+
+```javascript
+})(window.document, window.location, window.angular, { namespace: window });
+```
+
+In that case, you would be able to access All Your Base Href via **window.allYourBaseHref**.
+
+You may wish to consider using a custom object to hold references to any components, thereby minimizing top-level clutter. For example, you might do something like this:
+
+```javascript
+})(window.document, window.location, window.angular, { namespace: window.components = window.components || {} });
+```
+
+In that case, you would be able to access All Your Base Href via **window.components.allYourBaseHref**.
 
 ## Notes
 
