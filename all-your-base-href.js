@@ -40,23 +40,6 @@
 
 			this.deploymentContexts = options.deploymentContexts;
 		}
-
-	}
-
-	// If AngularJS is present, register a module and do the things from that.
-
-	if (angular) {
-
-		angular.module("allYourBaseHref", [])
-
-			.run(allYourBaseHref.doTheThings);
-	}
-
-	// Otherwise, just do the things.
-
-	else {
-
-		allYourBaseHref.doTheThings();
 	}
 
 	// Look, ma! Methods!
@@ -113,6 +96,24 @@
 
 		element.href = href;
 	};
+
+	// If AngularJS is present, register a module and do the things from that.
+
+	if (angular) {
+
+		angular.module("allYourBaseHref", [])
+
+			.run(allYourBaseHref.doTheThings);
+	}
+
+	// Otherwise, just do the things.
+
+	else {
+
+		allYourBaseHref.doTheThings();
+	}
+
+	// If a namespace was specified, attach allYourBaseHref to it.
 
 	if (options && options.namespace instanceof Object) {
 
