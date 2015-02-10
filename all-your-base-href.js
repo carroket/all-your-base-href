@@ -46,7 +46,12 @@
 
 	AllYourBaseHref.prototype.doTheThings = function() {
 
-		allYourBaseHref.setBaseHref(allYourBaseHref.getContextHref());
+		var href = allYourBaseHref.getContextHref();
+
+		if (href) {
+
+			allYourBaseHref.setBaseHref(href);
+		}
 	};
 
 	AllYourBaseHref.prototype.getContextHref = function() {
@@ -65,6 +70,8 @@
 				return result[1];
 			}
 		}
+
+		return null;
 	};
 
 	AllYourBaseHref.prototype.setBaseHref = function(href) {
